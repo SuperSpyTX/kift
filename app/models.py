@@ -1,4 +1,3 @@
-from flask import Flask
 from app import db
 
 class User(db.Model):
@@ -15,10 +14,10 @@ class User(db.Model):
         return self.username
 
     def is_authenticated(self):
-        return True 
+        return True
 
     def is_anonymous(self):
         return False
 
     def __repr__(self):
-        return ("{}".format(self.username))
+        return "{}".format(self.username)
