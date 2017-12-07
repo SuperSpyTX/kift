@@ -44,7 +44,7 @@ def kift():
         else:
             mime_type = request.headers.get("Content-Type")
             if (mime_type == "audio/ogg"):
-                ogg_file = open(uploads + "audio.ogg", 'wb')
+                ogg_file = open(uploads + "audio.ogg", "wb")
                 ogg_file.write(request.data)
                 #convert_ogg_to_wav(uploads + "audio.ogg")
                 return redirect("/kift")
