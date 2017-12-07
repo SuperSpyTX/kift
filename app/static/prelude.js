@@ -57,7 +57,7 @@ $.get = function(u,t,c,r) {
 $.post = function(u,t,d,c,r) {
 	r = new XMLHttpRequest();
 	r.open("POST", u);
-	r.setRequestHeader("Content-type", t);
+	r.setRequestHeader("Content-Type", t);
 	r.onreadystatechange = function() {if(r.readyState > 3) {c(r)}};
 	r.send(d);
 };

@@ -34,20 +34,22 @@ def convert_ogg_to_wav(filepath):
                 outputs={output_f: None})
     ff.run()
 
-@app.route("/upload", methods=["POST", "GET"])
+@app.route("/kift", methods=["POST", "GET"])
 #@login_required
 #@admin_only
-def upload():
+def kift():
     if request.method == "POST":
         if request.data is None:
             return redirect(request.url)
         else:
-            ogg_file = open(uploads + "audio.ogg", 'wb')
-            ogg_file.write(request.data)
-            #convert_ogg_to_wav(uploads + "audio.ogg")
-            return redirect(url_for("index"))
-        return redirect("url_for_index")
-    return render_template("upload.html")
+            mime_type = request.headers.get("Content-Type")
+            if (mime_type == "audio/ogg"):
+                ogg_file = open(uploads + "audio.ogg", 'wb')
+                ogg_file.write(request.data)
+                #convert_ogg_to_wav(uploads + "audio.ogg")
+                return redirect("/kift")
+        return redirect("/kift")
+    return render_template("kift.html")
 
 @app.route("/")
 def index():

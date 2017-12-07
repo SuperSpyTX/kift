@@ -6,7 +6,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
 	.then(function (stream) {
 		audio = new MediaRecorder(stream);
 		audio.ondataavailable = (e) => {
-			$.post("http://localhost:5000/upload", "audio/ogg", e.data, (r) => {
+			$.post("/kift", "audio/ogg", e.data, (r) => {
 				console.log("Audio post status: " + r.status);
 			});
 		};
