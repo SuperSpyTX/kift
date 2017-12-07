@@ -24,18 +24,18 @@ $.cookies = function(r,c,i) {
 	return c;
 };
 
-/* Takes a cookie name, Returns a cookie or null */
+/* Takes (cookie_name), Returns a cookie or null */
 $.cookie = function (n) {
 	n = document.cookie.match(RegExp('(?:^|;\\s*)' + n + '=([^;]*)'));
 	return n ? n[1] : null;
 };
 
 /*
-** Retrieve a network resource. Takes (type, url, callback), 
+** Retrieve a network resource. Takes (url, type, callback), 
 ** the callback is passed the response.
 */
 
-$.get = function(t,u,c,r) {
+$.get = function(u,t,c,r) {
 	r = new XMLHttpRequest();
 	r.open("GET", u);
 	r.responseType = t;
@@ -47,15 +47,16 @@ $.get = function(t,u,c,r) {
 };
 
 /*
-** Post to a URL, Takes (data, type, url, callback)
-** Callback is optional. 
+** Post to a URL, Takes (url, data, type, callback)
+** Callback is optional, it is passed the request object,
+** and called when the request is done.
 */
 
-$.post = function(d,t,u,c,r) {
+$.post = function(u,d,t,c,r) {
 	r = new XMLHttpRequest();
-	r.open("POST", u, true);
+	r.open("POST", u);
 	r.setRequestHeader("Content-type", t);
 	r.onreadystatechange = function() {
-	if(r.readyState == XMLHttpRequest.DONE && r.status == 200) {c()}};
+	if(r.readyState>3) {c(r)}};
 	r.send(d);
 };
