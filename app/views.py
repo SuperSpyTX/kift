@@ -27,8 +27,8 @@ def admin_only(f):
         return f(*args, **kwargs)
     return wrapped
 
-def convert_ogg_to_wav():
-    input_f = uploads + "audio.ogg"
+def convert_ogg_to_wav(filepath):
+    input_f = filepath
     output_f = uploads + "audio.wav"
     ff = FFmpeg(inputs={input_f: None},
                 outputs={output_f: None})
@@ -39,14 +39,12 @@ def convert_ogg_to_wav():
 #@admin_only
 def upload():
     if request.method == "POST":
-        if request.files is None:
+        if request.data is None:
             return redirect(request.url)
-        audio = request.files["file"]
-        if audio.filename == "":
-            return redirect(request.url)
-        if audio and audio.filename.split(".")[1] == "ogg":
-            audio.save(uploads + "audio.ogg")
-            convert_ogg_to_wav(audio)
+        else:
+            ogg_file = open(uploads + "audio.ogg", 'wb')
+            ogg_file.write(request.data)
+            #convert_ogg_to_wav(uploads + "audio.ogg")
             return redirect(url_for("index"))
         return redirect("url_for_index")
     return render_template("upload.html")
