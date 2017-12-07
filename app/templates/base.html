@@ -1,14 +1,21 @@
-<html>
-	<head>
-		{% if title %}
-		<title>{ title }} - Shop</title>
-		{% else %}
-		<title>Shop</title>
-		{% endif %}
-	</head>
-	<body>
-		<div>Home <a href="/index/">Home</a></div>
-		<hr>
-		{% block content %}{% endblock %}
-	</body>
+<!DOCTYPE html>
+<html class="H(100%) M(0) Bxz(bb)">
+
+<head>
+	<meta name=viewport content="width=device-width, initial-scale=1">
+	<meta charset=utf-8>
+	<link rel=stylesheet type=text/css href=static/style.css>
+	<link rel=stylesheet type=text/css href=static/type.css.min>
+	<!-- Set box-sizing to inherit so it may be overwritten. -->
+	<style>*,*:before,*:after{-moz-box-sizing:inherit;box-sizing:inherit}</style>
+	<script src=static/prelude.js></script>
+	<script src=https://unpkg.com/hyperapp@0.16.2/dist/hyperapp.js></script>
+	{% block head %}{% endblock head %}
+	<title>{% block title %}{{title|default}}{% endblock title %}</title>
+</head>
+
+<body class="D(f) H(100%) M(0) | Ff(ClearSans)">
+	{% block content %}{% endblock %}
+</body>
+
 </html>

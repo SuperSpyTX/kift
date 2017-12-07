@@ -1,3 +1,5 @@
+"use strict";
+
 /* prelude.js Javascript's missing prelude */
 
 function $(a) {
@@ -40,23 +42,22 @@ $.get = function(u,t,c,r) {
 	r.open("GET", u);
 	r.responseType = t;
 	r.onreadystatechange = function() {
-		if (r.readyState==4) {
-			c(t=="json"&&r.responseType!==t ? JSON.parse(r.response) : r.response);
+		if (r.readyState > 3) {
+			c(t == "json" && r.responseType !== t ? JSON.parse(r.response) : r.response);
 	}};
 	r.send();
 };
 
 /*
-** Post to a URL, Takes (url, data, type, callback)
+** Post to a URL, Takes (url, type, data, callback)
 ** Callback is optional, it is passed the request object,
 ** and called when the request is done.
 */
 
-$.post = function(u,d,t,c,r) {
+$.post = function(u,t,d,c,r) {
 	r = new XMLHttpRequest();
 	r.open("POST", u);
 	r.setRequestHeader("Content-type", t);
-	r.onreadystatechange = function() {
-	if(r.readyState>3) {c(r)}};
+	r.onreadystatechange = function() {if(r.readyState > 3) {c(r)}};
 	r.send(d);
 };
