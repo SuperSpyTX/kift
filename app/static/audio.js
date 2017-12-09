@@ -2,34 +2,57 @@
 
 var audio;
 
+/*
+Convert a Float32Array to a 16bit mono PCM Blob of type "audio/raw".
+*/
+function floatTo16bitPCM(f32array)
+{
+	const pcm = new ArrayBuffer(f32array.length * 2);
+	const pcm_view = new DataView(pcm);
+	for (var i = 0; i < f32array.length; ++i) {
+		var s = Math.max(-1, Math.min(1, f32array[i]));
+		pcm_view.setInt16(i * 2, s * (s < 0 ? 0x8000 : 0x7FFF), true);
+	}
+	return new Blob([pcm_view], {type: "audio/raw"});
+}
+
+/*
+Convert audio Blob (of any format decodable by the browser) to a 16bit mono PCM blob
+returns a promise.
+*/
+function audioTo16bitPCM(blob) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => {
+			new OfflineAudioContext(1, reader.result.byteLength / 4, 16000)
+			.decodeAudioData(reader.result)
+			.then((audio) => {
+				resolve(floatTo16bitPCM(audio.getChannelData(0)));
+			})
+			.catch(console.warn);
+		}
+		reader.onerror = reject;
+		reader.readAsArrayBuffer(blob);
+	});
+}
+
+/*
+Record from mic and send a 16bit mono PCM Blob to the server when each recording ends.
+*/
 navigator.mediaDevices.getUserMedia({audio: true})
-	.then(function (stream) {
-		audio = new MediaRecorder(stream);
-		audio.ondataavailable = (e) => {
-			var reader = new FileReader();
-			reader.onloadend = () => {
-				/* Create context to sample at 16khz */
-				var ctx = new OfflineAudioContext(1, reader.result.byteLength / 4, 16000);
-				ctx.decodeAudioData(reader.result, (audio_buff) => {
-					var samples = audio_buff.getChannelData(0);
-					/* We want a 16bit output so we need two bytes per sample */
-					var buff = new ArrayBuffer(samples.length * 2);
-					var view = new DataView(buff);
-					var offset = 0;
-					for (var i = 0; i < samples.length; ++i, offset += 2) {
-						var s = Math.max(-1, Math.min(1, samples[i]));
-						view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-					}
-					var raw_audio = new Blob([view], { type: "audio/raw"});
-					$.post("/kift", "audio/raw", raw_audio, (r) => {
-						console.log("Raw audio posted!");
-					});
-				})
-			}
-			reader.readAsArrayBuffer(e.data)
-		};
-	})
-	.catch(console.log);
+.then((stream) => {
+	audio = new MediaRecorder(stream);
+	audio.ondataavailable = (audio_event) => {
+		audioTo16bitPCM(audio_event.data)
+		.then((raw_audio) => {
+			$.post("/kift", "audio/raw", raw_audio, (r) => {
+				console.log("Raw audio posted!");
+			})
+		})
+		.catch(console.warn);
+	}
+})
+.catch(console.warn);
 
 document.addEventListener("keydown", (e) => {
 	if (e.key === ' ' && audio.state === "inactive")
