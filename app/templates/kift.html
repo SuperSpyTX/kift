@@ -2,9 +2,37 @@
 {% block title %}KIFT{% endblock %}
 {% block head %}
 <script src=static/audio.js></script>
+<script src=https://unpkg.com/@hyperapp/html@0.5.1/dist/html.dist.js></script>
 {% endblock %}
 {% block content %}
 <p>
 Press and hold space to record a voice clip, release to send the clip to the server.
 </p>
+<script>
+const {main, h1, button} = html;
+
+hyperapp.app({
+	state: {
+		record: ""
+	},
+	view: state => actions => (
+		main([
+			h1("K.I.F.T"),
+			button({
+				onclick: actions.toggleRec},
+				"Record: " + state.record)
+		])
+	),
+	actions: {
+		toggleRec: () => state => {
+			if (audio.state === "inactive")
+				audio.start()
+			else
+				audio.stop()
+			return {record: audio.state}
+		}
+	}
+},
+document.currentScript.parent);
+</script>
 {% endblock %}

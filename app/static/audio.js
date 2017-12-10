@@ -51,15 +51,13 @@ navigator.mediaDevices.getUserMedia({audio: true})
 		})
 		.catch(console.warn);
 	}
+	document.addEventListener("keydown", (e) => {
+		if (e.key === ' ' && audio.state === "inactive")
+			audio.start();
+	})
+	document.addEventListener("keyup", (e) => {
+		if (e.key === ' ' && audio.state === "recording")
+			audio.stop();
+	})
 })
-.catch(console.warn);
-
-document.addEventListener("keydown", (e) => {
-	if (e.key === ' ' && audio.state === "inactive")
-		audio.start();
-})
-
-document.addEventListener("keyup", (e) => {
-	if (e.key === ' ' && audio.state === "recording")
-		audio.stop();
-})
+.catch((e) => console.warn(e.message));
