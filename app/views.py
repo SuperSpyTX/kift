@@ -4,7 +4,6 @@ from flask import render_template, flash, redirect, url_for, request
 from app import app, db, models, forms
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from ffmpy import FFmpeg
 
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
@@ -41,9 +40,7 @@ def kift():
     if request.method == "POST":
         if request.data is None:
             return redirect(request.url)
-        else:
-            mime_type = request.headers.get("Content-Type")
-            print(mime_type)
+        elif request.headers.get("Content-Type") == "audio/ogg":
             raw_file = open(uploads + "audio.raw", "wb")
             raw_file.write(request.data)
             raw_file.close()

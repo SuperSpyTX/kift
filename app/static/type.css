@@ -21,11 +21,3 @@
     font-weight: bold;
     font-style: normal;
 }
-
-@font-face {
-    font-family: 'Papyrus';
-    src: url('papyrus-regular.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-

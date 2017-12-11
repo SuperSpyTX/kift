@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 {% block title %}KIFT{% endblock %}
 {% block head %}
+<script src=https://unpkg.com/@hyperapp/html@0.5.1/dist/html.dist.js></script>
+{% endblock %}
+{% block content %}
 <script src=static/audio.js></script>
+<script>
+const {main, h1, p} = html;
+
+const actions = hyperapp.app({
+	state: {
+		record: false
+	},
+	view: state => actions => (
+		main({class: "M(a) Ta(c) Bd(s,.5rem,blue) P(3rem)"}, [
+			h1({class: "Fz(s5) C(blue)"},
+				"K.I.F.T"
+			),
+			p({class: "C(blue)"},
+				state.record ? "Recording" : "Hold Space"
+			)
+		])
+	),
+	actions: {
+		recording: (bool) => state => ({record: bool})
+	}
+},
+document.currentScript.parent);
+</script>
 {% endblock %}
