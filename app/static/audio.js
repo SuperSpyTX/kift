@@ -52,12 +52,16 @@ navigator.mediaDevices.getUserMedia({audio: true})
 		.catch(console.warn);
 	}
 	document.addEventListener("keydown", (e) => {
-		if (e.key === ' ' && audio.state === "inactive")
+		if (e.key === ' ' && audio.state === "inactive") {
 			audio.start();
+			actions.recording(true);
+		}
 	})
 	document.addEventListener("keyup", (e) => {
-		if (e.key === ' ' && audio.state === "recording")
+		if (e.key === ' ' && audio.state === "recording") {
 			audio.stop();
+			actions.recording(false);
+		}
 	})
 })
 .catch((e) => console.warn(e.message));
