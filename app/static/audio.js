@@ -45,7 +45,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
 	audio.ondataavailable = (audio_event) => {
 		audioTo16bitPCM(audio_event.data)
 		.then((raw_audio) => {
-			$.post("/kift", "audio/raw", raw_audio, (r) => {
+			$.post("/", "audio/raw", raw_audio, (r) => {
 				console.log("Raw audio posted!");
 			})
 		})
