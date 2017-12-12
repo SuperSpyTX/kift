@@ -1,7 +1,7 @@
 # kift
 The jkrause elite team for voice based command and control center.
 
-# Building PocketSphinx
+## Building PocketSphinx
 
 To build the pocketsphinx wrapper, simply run make in the wrapper/ directory.
 
