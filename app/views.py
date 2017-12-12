@@ -33,7 +33,7 @@ def convert_ogg_to_wav(filepath):
                 outputs={output_f: None})
     ff.run()
 
-@app.route("/kift", methods=["POST", "GET"])
+@app.route("/", methods=["POST", "GET"])
 #@login_required
 #@admin_only
 def kift():
@@ -44,12 +44,8 @@ def kift():
             raw_file = open(uploads + "audio.raw", "wb")
             raw_file.write(request.data)
             raw_file.close()
-            return redirect("/kift")
-        return redirect("/kift")
-    return render_template("kift.html")
-
-@app.route("/")
-def index():
+            return redirect("/")
+        return redirect("/")
     return render_template("index.html")
 
 @app.route("/register", methods=["POST", "GET"])

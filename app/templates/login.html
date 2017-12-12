@@ -1,15 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Maxwell / Login{% endblock %}
 {% block content %}
-	<h1> Sign In</h1>
-	<form action="" method="post" name="login">
+<main class="Mx(a) Maw(50rem)">
+	<h2 class="Ta(c) Ff(Crimson) Fz(s4) Fw(n)" >Maxwell</h2>
+	<form action="" method=post name=login >
 		{{ form.hidden_tag() }}
-		<p>
-			Please enter username to login
-			{{ form.username(size=80)}}</br>
-		</p>
-		<p>
-			Please enter your password
-			{{ form.password(size=80)}}</br>
-		</p>
-		<p><input type="submit" value="Sign In"></p>
+		<fieldset class="M(0) Bd(s,s05,black)">
+			<legend>login</legend>
+			{{ form.username()}}
+		</fieldset>
+		<fieldset class="M(0) Bd(s,s05,black)">
+			<legend>password</legend>
+			{{ form.password()}}
+		</fieldset>
+		<input
+			class="P(s04) Mt(s03) W(100%) | Fz(s1) _rButton() Bd(s,s05,black) Bgc(white) Bgc(black):h C(white):h"
+			type=submit value="Login &rsaquo;">
 	</form>
+</main>
 {% endblock %}
