@@ -1,9 +1,10 @@
 import os
 from functools import wraps
 from flask import render_template, flash, redirect, url_for, request
-from app import app, db, models, forms
+from app import app, db, models, forms, pocketsphinx
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from io import BytesIO
 
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
@@ -40,11 +41,12 @@ def kift():
     if request.method == "POST":
         if request.data is None:
             return redirect(request.url)
-        elif request.headers.get("Content-Type") == "audio/ogg":
+        elif request.headers.get("Content-Type") == "audio/raw":
             raw_file = open(uploads + "audio.raw", "wb")
             raw_file.write(request.data)
             raw_file.close()
-            return redirect("/")
+            result = pocketsphinx.process(BytesIO(request.data))
+            return result
         return redirect("/")
     return render_template("index.html")
 
