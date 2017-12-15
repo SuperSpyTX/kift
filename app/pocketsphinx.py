@@ -1,5 +1,4 @@
 from ctypes import CDLL, POINTER, cast, c_char_p, c_void_p, c_size_t, c_short, c_int
-from io import BytesIO
 import struct
 
 class _PocketSphinxWrapperImpl():
@@ -50,13 +49,8 @@ class _PocketSphinxInstance():
     def process(self, buff):
         if self.is_loaded() is False:
             return None
-        big_integer_array = ()
-        reader = BytesIO(buff)
-        tmpbuf = bytearray(int(len(buff) / 4))
-        while reader.readinto(tmpbuf):
-            size = int(len(tmpbuf) / 2)
-            big_integer_array += struct.unpack('h' * size, tmpbuf)
-        size = len(big_integer_array)
+        size = int(len(buff) / 2)
+        big_integer_array = struct.unpack('h' * size, buff)
         res = self._impl.process_voice_data(self._pocket, big_integer_array, size)
         print(res)
         if res is None:
