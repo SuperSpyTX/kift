@@ -9,9 +9,10 @@
 .Bgc\(\#37474F\) {background-color: #37474F;}
 .Bgc\(\#F5F5F5\) {background-color: #F5F5F5;}
 .Bgc\(black\)\:h:hover {background-color: rgb(0,0,0);}
+.Bgc\(grey-9\)\:h:hover {background-color: rgb(244,244,244);}
 .Bgc\(white\) {background-color: rgb(255,255,255);}
 .Bxsh\(0\,0\,s02\,grey-4\) {box-shadow: 0 0 .694rem rgb(119,119,119);}
-.Bxsh\(0\,0\,s04\,grey-6\) {box-shadow: 0 0 .25rem rgb(170,170,170);}
+.Bxsh\(0\,0\,s05\,grey-5\) {box-shadow: 0 0 .125rem rgb(153,153,153);}
 .Bxz\(bb\) {-moz-box-sizing: border-box; box-sizing: border-box;}
 .C\(\#37474F\) {color: #37474F;}
 .C\(\#424242\) {color: #424242;}
@@ -53,6 +54,9 @@
 }
 @media all and (min-width: 48rem) {
 .W\(60\%\)\@md {width: 60%;}
+}
+@media all and (min-width: 64rem) {
+.P\(s03\)\@lg {padding: .5rem;}
 }
 @media all and (min-width: 64rem) {
 .W\(40\%\)\@lg {width: 40%;}
