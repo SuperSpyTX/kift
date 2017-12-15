@@ -1,10 +1,9 @@
 import os
 from functools import wraps
 from flask import render_template, flash, redirect, url_for, request
-from app import app, db, models, forms, pocketsphinx
+from app import app, db, models, forms, request_ps
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from io import BytesIO
 
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
@@ -27,13 +26,6 @@ def admin_only(f):
         return f(*args, **kwargs)
     return wrapped
 
-def convert_ogg_to_wav(filepath):
-    input_f = filepath
-    output_f = uploads + "audio.wav"
-    ff = FFmpeg(inputs={input_f: None},
-                outputs={output_f: None})
-    ff.run()
-
 @app.route("/", methods=["POST", "GET"])
 #@login_required
 #@admin_only
@@ -45,7 +37,7 @@ def kift():
             raw_file = open(uploads + "audio.raw", "wb")
             raw_file.write(request.data)
             raw_file.close()
-            result = pocketsphinx.process(BytesIO(request.data))
+            result = request_ps.process(request.data)
             return result
         return redirect("/")
     return render_template("index.html")
