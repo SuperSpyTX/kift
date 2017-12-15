@@ -47,18 +47,23 @@ navigator.mediaDevices.getUserMedia({audio: true})
 		.then((raw_audio) => {
 			$.post("/", "audio/raw", raw_audio, r => {
 				if (r.responseText != "")
-					actions.logUser(formatResponse(r.responseText));
+					if (r.responseText === "clear session") {
+						actions.logClear();
+						localStorage.removeItem("log");
+					}
+					else
+						actions.logUser(formatResponse(r.responseText));
 				actions.status("Hold Space");
 			})
 		})
 		.catch(error);
 	}
 	document.addEventListener("keydown", e => {
-		if (e.key === ' ')
+		if (e.key === " ")
 			recordStart();
 	})
 	document.addEventListener("keyup", e => {
-		if (e.key === ' ')
+		if (e.key === " ")
 			recordStop();
 	})
 })

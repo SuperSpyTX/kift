@@ -5,6 +5,7 @@
 *.pyc
 *.swp
 *__pycache__*
+*.db
 wrapper/sphinxbase/
 wrapper/*.dylib
 wrapper/*.dSYM

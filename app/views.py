@@ -1,15 +1,18 @@
 import os
 from functools import wraps
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, Response
 from app import app, db, models, forms, request_ps
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
+import gevent
+from gevent.queue import Queue
 
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "unauthorized"
 db.create_all()
+CLIENTS = []
 
 @login_manager.user_loader
 def load_user(username):
@@ -28,16 +31,36 @@ def admin_only(f):
 
 @app.route("/", methods=["POST", "GET"])
 #@login_required
-#@admin_only
 def kift():
     if request.method == "POST":
         if request.data is None:
-            return redirect(request.url)
+            return redirect("/")
         elif request.headers.get("Content-Type") == "audio/raw":
-            result = request_ps.process(request.data)
-            return result
+            response = request_ps.process(request.data)
+            sendResponse(response)
+            return response
         return redirect("/")
     return render_template("index.html")
+
+@app.route("/response")
+def subscribe():
+    def gen():
+        q = Queue()
+        CLIENTS.append(q)
+        try:
+            while True:
+                result = q.get()
+                yield "data: {}\n\n".format(str(result))
+        except GeneratorExit:
+            CLIENTS.remove(q)
+    return Response(gen(), mimetype="text/event-stream")
+
+def sendResponse(txt):
+    def respond():
+        response = str(txt)
+        for client in CLIENTS[:]:
+            client.put(response)
+    gevent.spawn(respond)
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
@@ -53,7 +76,6 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         test_unique = models.User.query.filter_by(username=username).first()
-
         if test_unique is not None:
             flash("username already exits, try again")
             return render_template("register.html", form=form)
