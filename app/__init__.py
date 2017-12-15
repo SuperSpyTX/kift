@@ -1,14 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from .pocketsphinx import PocketSphinx
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object("config")
 db = SQLAlchemy(app)
 
-
-from .pocketsphinx import PocketSphinx
-pocketsphinx = PocketSphinx("wrapper/sphinx-wrapper.dylib", b"wrapper/model")
-if pocketsphinx.init() is None:
-    print("Failed to load pocketsphinx!")
+pocketsphinx = PocketSphinx("wrapper/sphinx-wrapper.dylib", "wrapper/model", "wrapper/corpus/corpus.lm.bin", "wrapper/corpus/corpus.dic")
+request_ps = pocketsphinx.initialize()
 
 from app import views, models
