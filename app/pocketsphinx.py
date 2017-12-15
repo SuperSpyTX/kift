@@ -33,9 +33,9 @@ class PocketSphinx():
             res = proc(self.pocket, cast(integers2, POINTER(c_short)), count, 1)
         res = proc(self.pocket, cast(0, POINTER(c_short)), 0, 2)
         print(res)
+        if res is None:
+            return ""
         return res.decode("UTF-8")
 
 #pocket = PocketSphinx("wrapper/sphinx-wrapper.dylib", "wrapper/model")
 #print(pocket.init())
-
-

@@ -2,28 +2,51 @@
 {% block title %}Maxwell{% endblock %}
 {% block head %}
 <script src=https://unpkg.com/@hyperapp/html@0.5.1/dist/html.dist.js></script>
-<script src=static/audio.js></script>
+<script src=static/maxwell.js></script>
 {% endblock %}
 {% block content %}
 <script>
-const {main, h2, p} = html;
+const {main, h1, span, div, button} = html;
+
+const historyItem = " Fz(s2) P(s04) Mx(s03) Mt(s03) Ta(c) Bxsh(0,0,s04,grey-6) Bgc(white) Bdrus(s05) ";
 
 const actions = hyperapp.app({
 	state: {
-		record: false
+		status: "Hold Space",
+		log: JSON.parse(localStorage.getItem("log") || "[]")
 	},
 	view: state => actions => (
-		main({class: "M(a) Ta(c) Bd(s,.5rem,blue) P(3rem)"}, [
-			h2({class: "Fz(s5) Fw(n) C(blue) Ff(Crimson)"},
+		main({class: "D(f) Fld(c) Mx(a) W(100%) W(40%)@lg W(60%)@md H(100%) Maw(50rem) Bgc(#F5F5F5)"}, [
+			h1({class: "Fz(s4) C(#37474F) My(s03) Py(s05) Fw(n) Ff(Crimson) Ta(c)"},
 				"Maxwell"
 			),
-			p({class: "C(blue)"},
-				state.record ? "Recording" : "Hold Space"
+			div({class: "D(f) Fld(c) Ovy(s) H(100%) Bdt(s,s03,#37474F)"},
+				state.log.map(i => {
+					if (i.user)
+						return span({class: historyItem + "C(#424242)"}, i.body)
+					return span({class: historyItem + "C(#607D8B)"}, i.body)
+				}).concat(state.status == "..." ? span({class: historyItem + "C(#607D8B)"}, "...") : [])
+			),
+			button({class: "Mt(a) Ta(c) Py(s02) | _rInput() Bgc(#37474F) C(white) Fz(s3) M(s05) M(0)@md Bdrus(s04) Bdrus(0)@md Bxsh(0,0,s02,grey-4) Bxsh(n)@md",
+				onmousedown: recordStart,
+				onmouseup: recordStop,
+				},
+				state.status
 			)
 		])
 	),
 	actions: {
-		recording: (bool) => state => ({record: bool})
+		status: s => state => ({status: s}),
+		log: txt => state => {
+			state.log.push({body: txt});
+			localStorage.setItem("log", JSON.stringify(state.log));
+			return true;
+		},
+		logUser: txt => state => {
+			state.log.push({body: txt, user: true});
+			localStorage.setItem("log", JSON.stringify(state.log));
+			return true;
+		}
 	}
 },
 document.currentScript.parent);

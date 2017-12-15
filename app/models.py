@@ -11,7 +11,7 @@ class User(db.Model):
         return True
 
     def get_id(self):
-        return self.username
+        return self.id
 
     def is_authenticated(self):
         return True
