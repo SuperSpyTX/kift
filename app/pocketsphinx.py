@@ -86,8 +86,3 @@ class PocketSphinx():
 
     def __exit__(self, exceptiontype, exceptionvalue, trace):
         pass
-
-#pocketsphinx = PocketSphinx("sphinx-wrapper.dylib", "model")
-
-#print("Nice")
-# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4

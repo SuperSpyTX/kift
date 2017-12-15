@@ -1,6 +1,6 @@
 "use strict";
 
-var audio;
+var mic;
 
 /*
 Convert a Float32Array to a 16bit mono PCM Blob of type "audio/raw".
@@ -29,7 +29,7 @@ function audioTo16bitPCM(blob) {
 			.then((audio) => {
 				resolve(floatTo16bitPCM(audio.getChannelData(0)));
 			})
-			.catch(console.warn);
+			.catch(error);
 		}
 		reader.onerror = reject;
 		reader.readAsArrayBuffer(blob);
@@ -40,28 +40,56 @@ function audioTo16bitPCM(blob) {
 Record from mic and send a 16bit mono PCM Blob to the server when each recording ends.
 */
 navigator.mediaDevices.getUserMedia({audio: true})
-.then((stream) => {
-	audio = new MediaRecorder(stream);
-	audio.ondataavailable = (audio_event) => {
+.then(stream => {
+	mic = new MediaRecorder(stream);
+	mic.ondataavailable = audio_event => {
 		audioTo16bitPCM(audio_event.data)
 		.then((raw_audio) => {
-			$.post("/", "audio/raw", raw_audio, (r) => {
-				console.log("Raw audio posted!");
+			$.post("/", "audio/raw", raw_audio, r => {
+				if (r.responseText != "")
+					actions.logUser(formatResponse(r.responseText));
+				actions.status("Hold Space");
 			})
 		})
-		.catch(console.warn);
+		.catch(error);
 	}
-	document.addEventListener("keydown", (e) => {
-		if (e.key === ' ' && audio.state === "inactive") {
-			audio.start();
-			actions.recording(true);
-		}
+	document.addEventListener("keydown", e => {
+		if (e.key === ' ')
+			recordStart();
 	})
-	document.addEventListener("keyup", (e) => {
-		if (e.key === ' ' && audio.state === "recording") {
-			audio.stop();
-			actions.recording(false);
-		}
+	document.addEventListener("keyup", e => {
+		if (e.key === ' ')
+			recordStop();
 	})
 })
-.catch((e) => console.warn(e.message));
+.catch(error);
+
+function recordStart() {
+	if (mic && mic.state === "inactive") {
+		mic.start();
+		actions.status("Listening");
+	}
+}
+
+function recordStop() {
+	if (mic && mic.state === "recording") {
+		mic.stop();
+		actions.status("...");
+	}
+}
+
+function formatResponse(txt) {
+	if (txt != "") {
+		if (txt.indexOf("what") != -1 || txt.indexOf("how") != -1)
+			txt = txt + "?"
+		else
+			txt = txt + "."
+		txt = txt[0].toUpperCase() + txt.substring(1);
+	}
+	return txt;
+}
+
+function error(err) {
+	console.warn(err.message || err);
+	actions.status(err.message);
+}

@@ -1,12 +1,22 @@
 /* ---| Helpers |--- */
 ._rButton\(\) {cursor: pointer; margin: 0; height: auto; vertical-align: middle; appearance: none; color: inherit; -moz-focus-inner: none; border: none;}
+._rInput\(\) {-webkit-appearance: none; -moz-appearance: none; appearance: none; outline: none; box-sizing: border-box; border: none;}
 /* ---| Cells |--- */
-.Bd\(s\,\.5rem\,blue\) {border: solid .5rem rgb(51,126,221);}
 .Bd\(s\,s05\,black\) {border: solid .125rem rgb(0,0,0);}
+.Bdrus\(s04\) {border-radius: .25rem;}
+.Bdrus\(s05\) {border-radius: .125rem;}
+.Bdt\(s\,s03\,\#37474F\) {border-top: solid .5rem #37474F;}
+.Bgc\(\#37474F\) {background-color: #37474F;}
+.Bgc\(\#F5F5F5\) {background-color: #F5F5F5;}
 .Bgc\(black\)\:h:hover {background-color: rgb(0,0,0);}
 .Bgc\(white\) {background-color: rgb(255,255,255);}
+.Bxsh\(0\,0\,s02\,grey-4\) {box-shadow: 0 0 .694rem rgb(119,119,119);}
+.Bxsh\(0\,0\,s04\,grey-6\) {box-shadow: 0 0 .25rem rgb(170,170,170);}
 .Bxz\(bb\) {-moz-box-sizing: border-box; box-sizing: border-box;}
-.C\(blue\) {color: rgb(51,126,221);}
+.C\(\#37474F\) {color: #37474F;}
+.C\(\#424242\) {color: #424242;}
+.C\(\#607D8B\) {color: #607D8B;}
+.C\(white\) {color: rgb(255,255,255);}
 .C\(white\)\:h:hover {color: rgb(255,255,255);}
 .D\(f\) {display: -webkit-box; display: -ms-flexbox; display: -webkit-flex; display: flex;}
 .Ff\(ClearSans\) {font-family: ClearSans;}
@@ -14,15 +24,36 @@
 .Fld\(c\) {-webkit-flex-direction: column; -ms-flex-direction: column; flex-direction: column;}
 .Fw\(n\) {font-weight: normal;}
 .Fz\(s1\) {font-size: 1rem;}
+.Fz\(s2\) {font-size: 1.2rem;}
+.Fz\(s3\) {font-size: 1.44rem;}
 .Fz\(s4\) {font-size: 2rem;}
-.Fz\(s5\) {font-size: 4rem;}
 .H\(100\%\) {height: 100%;}
 .M\(0\) {margin: 0;}
-.M\(a\) {margin: auto;}
+.M\(s05\) {margin: .125rem;}
 .Maw\(50rem\) {max-width: 50rem;}
+.Mt\(a\) {margin-top: auto;}
 .Mt\(s03\) {margin-top: .5rem;}
 .Mx\(a\) {margin-left: auto; margin-right: auto;}
-.P\(3rem\) {padding: 3rem;}
+.Mx\(s03\) {margin-left: .5rem; margin-right: .5rem;}
+.My\(s03\) {margin-top: .5rem; margin-bottom: .5rem;}
+.Ovy\(s\) {overflow-y: scroll;}
 .P\(s04\) {padding: .25rem;}
+.Py\(s02\) {padding-top: .694rem; padding-bottom: .694rem;}
+.Py\(s05\) {padding-top: .125rem; padding-bottom: .125rem;}
 .Ta\(c\) {text-align: center;}
 .W\(100\%\) {width: 100%;}
+@media all and (min-width: 48rem) {
+.Bdrus\(0\)\@md {border-radius: 0;}
+}
+@media all and (min-width: 48rem) {
+.Bxsh\(n\)\@md {box-shadow: none;}
+}
+@media all and (min-width: 48rem) {
+.M\(0\)\@md {margin: 0;}
+}
+@media all and (min-width: 48rem) {
+.W\(60\%\)\@md {width: 60%;}
+}
+@media all and (min-width: 64rem) {
+.W\(40\%\)\@lg {width: 40%;}
+}

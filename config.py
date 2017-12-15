@@ -1,4 +1,4 @@
-WTF_CSRF_ENABED = True
+WTF_CSRF_ENABLED = True
 SECRET_KEY = "7tgfywy8effgwe8gyf"
 SECURITY_PASSWORD_SALT = 'f8fg38gf3g8f'
 SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
