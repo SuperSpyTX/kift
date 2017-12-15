@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/11 14:05:54 by jkrause           #+#    #+#             */
-/*   Updated: 2017/12/14 17:16:36 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/12/14 20:06:16 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define SPHINX_WRAPPER_H
 # include <stdio.h>
 # include <stdlib.h>
-# include "libft.h"
 # include <pocketsphinx.h>
 
 int						test_function(void);

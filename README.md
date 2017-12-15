@@ -15,7 +15,7 @@ Please help me by finding all the missing Homebrew dependencies.
 
 ## Building Corpus for PocketSphinx
 
-Either run `make -C wrapper/ corpus-update` or run `bash corpus-update.sh` in the wrapper/ directory.
+Run `make -C wrapper/ corpus` to update/create the corpus.  It will only rebuild if you change the corpus.txt file.
 
 The corpus.txt data is ours to update and change as see fit for the building tool.
 

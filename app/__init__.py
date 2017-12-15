@@ -6,7 +6,7 @@ app = Flask(__name__, static_url_path='/static')
 app.config.from_object("config")
 db = SQLAlchemy(app)
 
-pocketsphinx = PocketSphinx("wrapper/sphinx-wrapper.dylib", "wrapper/model", "wrapper/model_v2/corpus.lm.bin", "wrapper/model_v2/corpus.dic")
+pocketsphinx = PocketSphinx("wrapper/sphinx-wrapper.dylib", "wrapper/model", "wrapper/corpus/corpus.lm.bin", "wrapper/corpus/corpus.dic")
 request_ps = pocketsphinx.initialize()
 
 from app import views, models
