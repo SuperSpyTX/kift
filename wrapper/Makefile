@@ -115,6 +115,9 @@ sphinxbase:
 	cd ./pocketsphinx-5prealpha && ./autogen.sh --prefix=$$(echo $(PWD)/sphinxbase) && make && make install
 	rm -rf sphinxbase-5prealpha && rm -rf pocketsphinx-5prealpha
 
+corpus-update:
+	@bash corpus-update.sh
+
 re: clean all 
 
 clean:

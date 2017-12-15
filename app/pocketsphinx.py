@@ -8,7 +8,7 @@ class _PocketSphinxWrapperImpl():
         self._init_sphinx = self.lib.init_sphinx
         self._init_sphinx.restype = c_void_p
         self._init_sphinx.argtypes = [POINTER(c_char_p), c_int]
-        self._process_data = self.lib.process_voice_data
+        self._process_data = self.lib.process_voice_hypothesis
         self._process_data.restype = c_char_p
         self._process_data.argtypes = [c_void_p, POINTER(c_short), c_size_t]
 
@@ -61,15 +61,18 @@ class _PocketSphinxInstance():
         print(res)
         if res is None:
             return ""
-        return res.decode("UTF-8")
+        return res.decode("UTF-8").lower()
 
 class PocketSphinx():
-    def __init__(self, libpath, modelpath, dictionary=None, debug=False):
+    def __init__(self, libpath, modelpath, lmfile=None, dictionary=None, debug=False):
         self.libpath = libpath
         self.debug = debug
         self.language = 'en-us'
         self.modeldir = '{0}/{1}/{1}'.format(modelpath, self.language)
-        self.lmfile = '{0}.lm.bin'.format(self.modeldir)
+        if lmfile is None:
+            self.lmfile = '{0}.lm.bin'.format(self.modeldir)
+        else:
+            self.lmfile = lmfile
         if dictionary is None:
             self.dict = '{0}/{1}/cmudict-{1}.dict'.format(modelpath, self.language)
         else:

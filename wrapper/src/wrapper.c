@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/11 18:00:51 by jkrause           #+#    #+#             */
-/*   Updated: 2017/12/14 16:56:45 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/12/14 19:11:28 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ ps_decoder_t					*init_sphinx(char **args, int argc)
 	return (ps);
 }
 
-char							*process_voice_data(ps_decoder_t *ptr,
+char							*process_voice_hypothesis(ps_decoder_t *ptr,
 									int16_t *data, size_t size)
 {
 	int							res;
