@@ -20,7 +20,7 @@ define(MK_DEBUG, 0)
 define(MK_SPHINX_WRAPPER_NAME, sphinx-wrapper)
 define(MK_SPHINX_WRAPPER_ISLIB, 1)
 define(MK_SPHINX_WRAPPER_INCLUDE_DIRS, includes sphinxbase/include sphinxbase/include/pocketsphinx sphinxbase/include/sphinxbase)
-define(MK_SPHINX_WRAPPER_SRC_DIRS, src libft)
+define(MK_SPHINX_WRAPPER_SRC_DIRS, src )
 define(MK_SPHINX_WRAPPER_DEBUG, 0)
 define(MK_SPHINX_WRAPPER_LITE, 0)
 
@@ -44,13 +44,13 @@ SPHINX_WRAPPER_OBJ = $(subst .c,.o, $(SPHINX_WRAPPER_SRC))
 
 # ------------------- Targets ----------------------- #
 
-all: sphinxbase $(SPHINX_WRAPPER_NAME)
+all: sphinxbase corpus $(SPHINX_WRAPPER_NAME)
 
 %.o: %.c
 	MK_AUTO_COMPILER $(CFLAGS) -c $? -o $@
 
 $(SPHINX_WRAPPER_NAME): $(SPHINX_WRAPPER_OBJ)
-	MK_AUTO_COMPILER $(CFLAGS) -Lsphinxbase/lib -lpocketsphinx -lsphinxbase -lsphinxad -dynamiclib $(SPHINX_WRAPPER_OBJ) -o $(SPHINX_WRAPPER_NAME)dnl
+	MK_AUTO_COMPILER $(CFLAGS) -Lsphinxbase/lib -lpocketsphinx -lsphinxbase -lsphinxad -dynamiclib $(SPHINX_WRAPPER_OBJ) -o $(SPHINX_WRAPPER_NAME)
 
 sphinxbase:
 	tar -zxf pocketsphinx-5prealpha.tar.gz
@@ -59,11 +59,14 @@ sphinxbase:
 	cd ./pocketsphinx-5prealpha && ./autogen.sh --prefix=$$(echo $(PWD)/sphinxbase) && make && make install
 	rm -rf sphinxbase-5prealpha && rm -rf pocketsphinx-5prealpha
 
-re: ifelse(MK_FCLEAN_ON_RE, 1,f)clean all dnl
+corpus: corpus.txt
+	@bash corpus-update.sh
 
+re: ifelse(MK_FCLEAN_ON_RE, 1,f)clean all dnl
 
 clean:
 	/bin/rm -f $(SPHINX_WRAPPER_OBJ)
 
 fclean: clean
 	/bin/rm -f $(SPHINX_WRAPPER_NAME)
+	/bin/rm -rf corpus
