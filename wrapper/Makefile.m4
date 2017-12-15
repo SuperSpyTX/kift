@@ -14,7 +14,7 @@ divert(-1)
 
 # ------------- Real Configuration ------------------ #
 define(MK_NUM_OF_TARGETS, 1)
-define(MK_FCLEAN_ON_RE, 0)
+define(MK_FCLEAN_ON_RE, 1)
 define(MK_DEBUG, 0)
 
 define(MK_SPHINX_WRAPPER_NAME, sphinx-wrapper)

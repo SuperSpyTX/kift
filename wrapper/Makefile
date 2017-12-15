@@ -39,7 +39,7 @@ sphinxbase:
 corpus: corpus.txt
 	@bash corpus-update.sh
 
-re: clean all 
+re: fclean all 
 clean:
 	/bin/rm -f $(SPHINX_WRAPPER_OBJ)
 
