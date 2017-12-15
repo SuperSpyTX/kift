@@ -4,8 +4,9 @@ from flask import render_template, flash, redirect, url_for, request, Response
 from app import app, db, models, forms, request_ps
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import gevent
 from gevent.queue import Queue
+from threading import Thread
+from .parse import parse_command
 
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
@@ -37,7 +38,7 @@ def kift():
             return redirect("/")
         elif request.headers.get("Content-Type") == "audio/raw":
             response = request_ps.process(request.data)
-            sendResponse(response)
+            Thread(target=parse_command, args=(response, )).start()
             return response
         return redirect("/")
     return render_template("index.html")
@@ -54,13 +55,6 @@ def subscribe():
         except GeneratorExit:
             CLIENTS.remove(q)
     return Response(gen(), mimetype="text/event-stream")
-
-def sendResponse(txt):
-    def respond():
-        response = str(txt)
-        for client in CLIENTS[:]:
-            client.put(response)
-    gevent.spawn(respond)
 
 @app.route("/register", methods=["POST", "GET"])
 def register():

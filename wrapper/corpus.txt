@@ -8,3 +8,15 @@ is
 it
 clear
 session
+joe
+please
+maxwell
+hey max
+lights
+brightness
+up
+down
+on
+off
+too
+dark
