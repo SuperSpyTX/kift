@@ -8,4 +8,4 @@
 wrapper/sphinxbase/
 wrapper/*.dylib
 wrapper/*.dSYM
-wrapper/model_v2
+wrapper/corpus

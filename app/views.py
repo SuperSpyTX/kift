@@ -34,9 +34,6 @@ def kift():
         if request.data is None:
             return redirect(request.url)
         elif request.headers.get("Content-Type") == "audio/raw":
-            raw_file = open(uploads + "audio.raw", "wb")
-            raw_file.write(request.data)
-            raw_file.close()
             result = request_ps.process(request.data)
             return result
         return redirect("/")
