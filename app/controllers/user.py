@@ -1,43 +1,13 @@
-import os
-from functools import wraps
-from flask import render_template, flash, redirect, url_for, request
-from app import app, db, models, forms, request_ps
-from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-
-uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "unauthorized"
-db.create_all()
+from app import app, db, models, forms, render_template, redirect, request, url_for, login_manager, flash
+from flask_login import login_required, login_user, current_user, logout_user
 
 @login_manager.user_loader
 def load_user(username):
-    try:
-        return models.User.query.filter_by(username=username).first()
-    except Exception:
+    user = models.User.query.filter_by(username=username)
+    if user is None:
         return None
-
-def admin_only(f):
-    @wraps(f)
-    def wrapped(*args, **kwargs):
-        if current_user.admin != True:
-            return redirect(url_for("unauthorized"))
-        return f(*args, **kwargs)
-    return wrapped
-
-@app.route("/", methods=["POST", "GET"])
-#@login_required
-#@admin_only
-def kift():
-    if request.method == "POST":
-        if request.data is None:
-            return redirect(request.url)
-        elif request.headers.get("Content-Type") == "audio/raw":
-            result = request_ps.process(request.data)
-            return result
-        return redirect("/")
-    return render_template("index.html")
+    return user
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
@@ -101,14 +71,3 @@ def logout():
 @app.route("/unauthorized")
 def unauthorized():
     return "NICE TRY ASSHOLE"
-
-@app.route("/testauth")
-@login_required
-def testauth():
-    return "You actually did it, moron"
-
-@app.route("/testadmin")
-@login_required
-@admin_only
-def testadmin():
-    return "AREA 51 SHIT"

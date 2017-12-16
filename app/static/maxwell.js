@@ -37,6 +37,16 @@ function audioTo16bitPCM(blob) {
 }
 
 /*
+Testing the SSE functionality
+*/
+
+var evtSource = new EventSource('events');
+evtSource.onmessage = function(e) {
+	console.log("event: " + e.data);
+}
+console.log("evt registeredpls");
+
+/*
 Record from mic and send a 16bit mono PCM Blob to the server when each recording ends.
 */
 navigator.mediaDevices.getUserMedia({audio: true})

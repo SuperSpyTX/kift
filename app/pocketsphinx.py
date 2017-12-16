@@ -52,15 +52,14 @@ class _PocketSphinxInstance():
         size = int(len(buff) / 2)
         big_integer_array = struct.unpack('h' * size, buff)
         res = self._impl.process_voice_data(self._pocket, big_integer_array, size)
-        print(res)
         if res is None:
             return ""
         return res.decode("UTF-8").lower()
 
 class PocketSphinx():
-    def __init__(self, libpath, modelpath, lmfile=None, dictionary=None, debug=False):
+    def __init__(self, libpath, modelpath, lmfile=None, dictionary=None):
         self.libpath = libpath
-        self.debug = debug
+        self.debug = False
         self.language = 'en-us'
         self.modeldir = '{0}/{1}/{1}'.format(modelpath, self.language)
         if lmfile is None:
