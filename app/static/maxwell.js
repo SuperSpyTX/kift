@@ -37,16 +37,6 @@ function audioTo16bitPCM(blob) {
 }
 
 /*
-Testing the SSE functionality
-*/
-
-var evtSource = new EventSource('events');
-evtSource.onmessage = function(e) {
-	console.log("event: " + e.data);
-}
-console.log("evt registeredpls");
-
-/*
 Record from mic and send a 16bit mono PCM Blob to the server when each recording ends.
 */
 navigator.mediaDevices.getUserMedia({audio: true})
@@ -55,9 +45,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
 	mic.ondataavailable = audio_event => {
 		audioTo16bitPCM(audio_event.data)
 		.then((raw_audio) => {
-			$.post("/", "audio/raw", raw_audio, r => {
-				if (r.responseText != "")
-					actions.logUser(formatResponse(r.responseText));
+			$.post("/", "audio/raw", raw_audio, () => {
 				actions.status("Talk to max");
 			})
 		})
@@ -105,12 +93,13 @@ function error(err) {
 }
 
 function oneOf(array) {
-	return array[Math.floor(Math.random() * array.length)];
+	return array[Math.round(Math.random() * array.length)];
 }
 
 function commandClear() {
 	actions.logClear();
 	localStorage.removeItem("log");
+	return null;
 }
 
 const NOT_FOUND = [
@@ -130,4 +119,29 @@ function parseCommand(command) {
 	}
 	else
 		return oneOf(NOT_FOUND);
+}
+
+/*
+Listen for server response
+*/
+
+const ev = new EventSource("response");
+ev.onmessage = e => {
+	const response = JSON.parse(e.data);
+	if (typeof response === "string") {
+		actions.logUser(response);
+	}
+	else {
+		if (response[0])
+			actions.log(response[1]);
+		else {
+			const txt = parseCommand(response[1]);
+			if (txt !== null)
+				actions.log(txt);
+		}
+	}
+}
+
+window.onbeforeunload = () => {
+	ev.close();
 }
