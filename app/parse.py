@@ -2,20 +2,18 @@ import random
 import gevent
 
 def command_greeting(arg):
-	return random.choice(["Greetings.", "Hello.", "Well Met."])
+    return random.choice([
+        "Greetings.",
+        "Hello.",
+        "Well Met."
+    ])
 
-def command_brightness_down(arg):
-	print("Turning brightness down")
-	return random.choice(["Adjusting lights"])
-
-def command_brightness_up(arg):
-	return random.choice(["Adjusting lights"])
-
-DISPATCH = [
-    (frozenset(["hello", "hi", "hey max", "aloha", "max"]), command_greeting),
-    (frozenset(["brightness down", "lights down", "too bright"]), command_brightness_down),
-    (frozenset(["brightness up", "lights up", "too dark"]), command_brightness_up)
-]
+COMMANDS = {
+    "hello":command_greeting,
+    "hi":command_greeting,
+    "hey max":command_greeting,
+    "aloha":command_greeting,
+}
 
 def sendResponse(txt):
     def respond():
@@ -25,7 +23,7 @@ def sendResponse(txt):
     gevent.spawn(respond)
 
 def parse_command(command):
-    for switch in DISPATCH:
-        if command in switch[0]:
-            sendResponse(switch[1](command))
-            break
+    if command in COMMANDS:
+        sendResponse("[true," + DISPATCH[command](command) + "]")
+    else:
+        sendResponse("[false]")

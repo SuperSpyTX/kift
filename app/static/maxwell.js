@@ -47,13 +47,8 @@ navigator.mediaDevices.getUserMedia({audio: true})
 		.then((raw_audio) => {
 			$.post("/", "audio/raw", raw_audio, r => {
 				if (r.responseText != "")
-					if (r.responseText === "clear session") {
-						actions.logClear();
-						localStorage.removeItem("log");
-					}
-					else
-						actions.logUser(formatResponse(r.responseText));
-				actions.status("Hold Space");
+					actions.logUser(formatResponse(r.responseText));
+				actions.status("Talk to max");
 			})
 		})
 		.catch(error);
@@ -97,4 +92,32 @@ function formatResponse(txt) {
 function error(err) {
 	console.warn(err.message || err);
 	actions.status(err.message);
+}
+
+function oneOf(array) {
+	return array[Math.floor(Math.random() * array.length)];
+}
+
+function commandClear() {
+	actions.logClear();
+	localStorage.removeItem("log");
+}
+
+const NOT_FOUND = [
+	"Regrettably I can't serve you in this matter.",
+	"I didn't get that.",
+	"I'm not sure what you mean."
+]
+
+const COMMANDS = {
+	"clear session": commandClear,
+	"delete history": commandClear
+}
+
+function parseCommand(command) {
+	if (command in COMMANDS) {
+		return COMMANDS[command](command);
+	}
+	else
+		return oneOf(NOT_FOUND);
 }
