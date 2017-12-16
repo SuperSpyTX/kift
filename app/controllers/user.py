@@ -1,60 +1,13 @@
-import os
-from functools import wraps
-from flask import render_template, flash, redirect, url_for, request, Response
-from app import app, db, models, forms, request_ps
-from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from gevent.queue import Queue
-from threading import Thread
-from .parse import parse_command
-
-uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "unauthorized"
-db.create_all()
-CLIENTS = []
+from app import app, db, models, forms, render_template, redirect, request, url_for, login_manager, flash
+from flask_login import login_required, login_user, current_user, logout_user
 
 @login_manager.user_loader
 def load_user(username):
-    try:
-        return models.User.query.filter_by(username=username).first()
-    except Exception:
+    user = models.User.query.filter_by(username=username)
+    if user is None:
         return None
-
-def admin_only(f):
-    @wraps(f)
-    def wrapped(*args, **kwargs):
-        if current_user.admin != True:
-            return redirect(url_for("unauthorized"))
-        return f(*args, **kwargs)
-    return wrapped
-
-@app.route("/", methods=["POST", "GET"])
-#@login_required
-def kift():
-    if request.method == "POST":
-        if request.data is None:
-            return redirect("/")
-        elif request.headers.get("Content-Type") == "audio/raw":
-            response = request_ps.process(request.data)
-            Thread(target=parse_command, args=(response, )).start()
-            return response
-        return redirect("/")
-    return render_template("index.html")
-
-@app.route("/response")
-def subscribe():
-    def gen():
-        q = Queue()
-        CLIENTS.append(q)
-        try:
-            while True:
-                result = q.get()
-                yield "data: {}\n\n".format(str(result))
-        except GeneratorExit:
-            CLIENTS.remove(q)
-    return Response(gen(), mimetype="text/event-stream")
+    return user
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
@@ -117,14 +70,3 @@ def logout():
 @app.route("/unauthorized")
 def unauthorized():
     return "NICE TRY ASSHOLE"
-
-@app.route("/testauth")
-@login_required
-def testauth():
-    return "You actually did it, moron"
-
-@app.route("/testadmin")
-@login_required
-@admin_only
-def testadmin():
-    return "AREA 51 SHIT"

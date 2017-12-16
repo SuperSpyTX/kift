@@ -1,7 +1,6 @@
 import random
-import gevent
 
-def command_greeting(arg):
+def command_greeting(arg=None):
     return random.choice([
         "Greetings.",
         "Hello.",
@@ -15,15 +14,8 @@ COMMANDS = {
     "aloha":command_greeting,
 }
 
-def sendResponse(txt):
-    def respond():
-        response = str(txt)
-        for client in CLIENTS[:]:
-            client.put(response)
-    gevent.spawn(respond)
-
-def parse_command(command):
+def parse_command(command, client_send):
     if command in COMMANDS:
-        sendResponse("[true," + DISPATCH[command](command) + "]")
+        client_send("[true,\"" + COMMANDS[command](command) + "\"]")
     else:
-        sendResponse("[false]")
+        client_send("[false]")
