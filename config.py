@@ -1,4 +1,8 @@
 WTF_CSRF_ENABLED = True
+POCKETSPHINX_LIBPATH = "wrapper/sphinx-wrapper.dylib"
+POCKETSPHINX_MODELDIR = "wrapper/model"
+POCKETSPHINX_CORPUSDIR = "wrapper/corpus"
+CLIENT_SSE_TIMEOUT = 1800
 SECRET_KEY = "7tgfywy8effgwe8gyf"
 SECURITY_PASSWORD_SALT = 'f8fg38gf3g8f'
 SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
