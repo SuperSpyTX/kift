@@ -46,7 +46,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
 		audioTo16bitPCM(audio_event.data)
 		.then((raw_audio) => {
 			$.post("/", "audio/raw", raw_audio, () => {
-				actions.status("Talk to max");
+				actions.status("Talk to Max");
 			})
 		})
 		.catch(error);
@@ -93,13 +93,24 @@ function error(err) {
 }
 
 function oneOf(array) {
-	return array[Math.round(Math.random() * array.length)];
+	return array[Math.floor(Math.random() * array.length)];
 }
+
+function speak(txt) {
+	const say = new SpeechSynthesisUtterance(txt);
+	speechSynthesis.speak(say);
+}
+
+// Commands
 
 function commandClear() {
 	actions.logClear();
 	localStorage.removeItem("log");
 	return null;
+}
+
+function commandGreet() {
+	return oneOf(["Hello.", "Greetings."]);
 }
 
 const NOT_FOUND = [
@@ -109,6 +120,15 @@ const NOT_FOUND = [
 ]
 
 const COMMANDS = {
+	"hey": commandGreet,
+	"hello": commandGreet,
+	"hey hello": commandGreet,
+	"hi": commandGreet,
+	"hey max": commandGreet,
+	"hi max": commandGreet,
+	"hello max": commandGreet,
+	"max": commandGreet,
+	"maxwell": commandGreet,
 	"clear session": commandClear,
 	"delete history": commandClear
 }
@@ -129,15 +149,21 @@ const ev = new EventSource("response");
 ev.onmessage = e => {
 	const response = JSON.parse(e.data);
 	if (typeof response === "string") {
-		actions.logUser(response);
+		if (response !== "") {
+			actions.logUser(formatResponse(response));
+		}
 	}
 	else {
-		if (response[0])
+		if (response[0]) {
 			actions.log(response[1]);
+			speak(response[1]);
+		}
 		else {
 			const txt = parseCommand(response[1]);
-			if (txt !== null)
+			if (txt !== null) {
 				actions.log(txt);
+				speak(txt);
+			}
 		}
 	}
 }

@@ -11,7 +11,9 @@ session
 joe
 please
 maxwell
-hey max
+hey
+max
+maxwell
 lights
 brightness
 up
