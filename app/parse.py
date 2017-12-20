@@ -5,11 +5,10 @@ def applescript(script):
     osa = subprocess.Popen(["osascript", "-"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE)
-    return osa.communicate(bytes(script, "UTF-8"))[0]
+    return osa.communicate(bytes(script, "UTF-8"))
 
 def command_lights_on(arg=None):
-    applescript(
-		"""
+    applescript("""
     tell application "System Events"
     	repeat 16 times
     		key code 144
@@ -22,8 +21,7 @@ def command_lights_on(arg=None):
     ])
 
 def command_lights_off(arg=None):
-    applescript(
-		"""
+    applescript("""
     tell application "System Events"
     	repeat 16 times
     		key code 145
