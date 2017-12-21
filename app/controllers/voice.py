@@ -23,7 +23,6 @@ class SemaQueue():
         self.lock.release()
 
 def push_event(text):
-    print("Running like a maniac")
     for client in CLIENTS:
         client.push(text)
 
@@ -34,17 +33,13 @@ def voice():
             return redirect(request.url)
         elif request.headers.get("Content-Type") == "audio/raw":
             response = request_ps.process(request.data)
+            push_event("\"" + response + "\"")
             Thread(target=parse_command, args=(response, push_event)).start()
-            return response
+            return "OK"
         return redirect("/")
     return render_template("index.html")
 
-@app.route("/push")
-def push():
-    Thread(target=push_event, args=("fuck yes this works", )).start()
-    return "pls isa"
-
-@app.route("/events")
+@app.route("/response")
 def events():
     def gen():
         q = SemaQueue()

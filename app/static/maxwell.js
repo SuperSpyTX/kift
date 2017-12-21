@@ -37,16 +37,6 @@ function audioTo16bitPCM(blob) {
 }
 
 /*
-Testing the SSE functionality
-*/
-
-var evtSource = new EventSource('events');
-evtSource.onmessage = function(e) {
-	console.log("event: " + e.data);
-}
-console.log("evt registeredpls");
-
-/*
 Record from mic and send a 16bit mono PCM Blob to the server when each recording ends.
 */
 navigator.mediaDevices.getUserMedia({audio: true})
@@ -55,10 +45,8 @@ navigator.mediaDevices.getUserMedia({audio: true})
 	mic.ondataavailable = audio_event => {
 		audioTo16bitPCM(audio_event.data)
 		.then((raw_audio) => {
-			$.post("/", "audio/raw", raw_audio, r => {
-				if (r.responseText != "")
-					actions.logUser(formatResponse(r.responseText));
-				actions.status("Talk to max");
+			$.post("/", "audio/raw", raw_audio, () => {
+				actions.status("Talk to Max");
 			})
 		})
 		.catch(error);
@@ -108,9 +96,21 @@ function oneOf(array) {
 	return array[Math.floor(Math.random() * array.length)];
 }
 
+function speak(txt) {
+	const say = new SpeechSynthesisUtterance(txt);
+	speechSynthesis.speak(say);
+}
+
+// Commands
+
 function commandClear() {
 	actions.logClear();
 	localStorage.removeItem("log");
+	return null;
+}
+
+function commandGreet() {
+	return oneOf(["Hello.", "Greetings."]);
 }
 
 const NOT_FOUND = [
@@ -119,9 +119,17 @@ const NOT_FOUND = [
 	"I'm not sure what you mean."
 ]
 
-const COMMANDS = {
-	"clear session": commandClear,
-	"delete history": commandClear
+const DEF = [
+	["hey", "hello", "hi", "max", "hey max", "hello max", "maxwell", commandGreet],
+	["clear session", "delete history", commandClear]
+]
+
+const COMMANDS = {};
+
+for (var i = 0; i < DEF.length; ++i) {
+	for (var j = 0; j < DEF[i].length - 1; ++j) {
+		COMMANDS[DEF[i][j]] = DEF[i][DEF[i].length - 1];
+	}
 }
 
 function parseCommand(command) {
@@ -130,4 +138,35 @@ function parseCommand(command) {
 	}
 	else
 		return oneOf(NOT_FOUND);
+}
+
+/*
+Listen for server response
+*/
+
+const ev = new EventSource("response");
+ev.onmessage = e => {
+	const response = JSON.parse(e.data);
+	if (typeof response === "string") {
+		if (response !== "") {
+			actions.logUser(formatResponse(response));
+		}
+	}
+	else {
+		if (response[0]) {
+			actions.log(response[1]);
+			speak(response[1]);
+		}
+		else {
+			const txt = parseCommand(response[1]);
+			if (txt !== null) {
+				actions.log(txt);
+				speak(txt);
+			}
+		}
+	}
+}
+
+window.onbeforeunload = () => {
+	ev.close();
 }

@@ -9,7 +9,6 @@
 .Bgc\(\#37474F\) {background-color: #37474F;}
 .Bgc\(\#F5F5F5\) {background-color: #F5F5F5;}
 .Bgc\(black\)\:h:hover {background-color: rgb(0,0,0);}
-.Bgc\(grey-9\)\:h:hover {background-color: rgb(244,244,244);}
 .Bgc\(white\) {background-color: rgb(255,255,255);}
 .Bxsh\(0\,0\,s02\,grey-4\) {box-shadow: 0 0 .694rem rgb(119,119,119);}
 .Bxsh\(0\,0\,s05\,grey-5\) {box-shadow: 0 0 .125rem rgb(153,153,153);}
@@ -29,6 +28,7 @@
 .Fz\(s3\) {font-size: 1.44rem;}
 .Fz\(s4\) {font-size: 2rem;}
 .H\(100\%\) {height: 100%;}
+.H\(s03\) {height: .5rem;}
 .M\(0\) {margin: 0;}
 .M\(s05\) {margin: .125rem;}
 .Maw\(50rem\) {max-width: 50rem;}
@@ -36,7 +36,6 @@
 .Mt\(s03\) {margin-top: .5rem;}
 .Mx\(a\) {margin-left: auto; margin-right: auto;}
 .Mx\(s03\) {margin-left: .5rem; margin-right: .5rem;}
-.My\(s03\) {margin-top: .5rem; margin-bottom: .5rem;}
 .Ovy\(s\) {overflow-y: scroll;}
 .P\(s04\) {padding: .25rem;}
 .Py\(s02\) {padding-top: .694rem; padding-bottom: .694rem;}
