@@ -17,15 +17,16 @@ const actions = hyperapp.app({
 	},
 	view: state => actions => (
 		main({class: "D(f) Fld(c) Mx(a) W(100%) W(40%)@lg W(60%)@md H(100%) Maw(50rem) Bgc(#F5F5F5)"}, [
-			h1({class: "Fz(s4) C(#37474F) My(s03) Py(s05) Fw(n) Ff(Crimson) Ta(c)"},
+			h1({class: "Fz(s4) C(#37474F) Mt(s03) Py(s05) Fw(n) Ff(Crimson) Ta(c)"},
 				"Maxwell"
 			),
 			div({class: "D(f) Fld(c) Ovy(s) H(100%) Bdt(s,s03,#37474F)"},
 				state.log.map(i => {
 					if (i.user)
-						return span({class: historyItem + "C(#424242)"}, i.body)
-					return span({class: historyItem + "C(#607D8B)"}, i.body)
-				}).concat(state.status == "..." ? span({class: historyItem + "C(#607D8B)"}, "...") : [])
+						return span({class: historyItem + "C(#424242)", oncreate: n => n.scrollIntoView()}, i.body)
+					return span({class: historyItem + "C(#607D8B)", oncreate: n => n.scrollIntoView()}, i.body)
+				}).concat(state.status == "..." ? span({class: historyItem + "C(#607D8B)"}, "...") : []).concat(
+				div({class: "H(s03)"}))
 			),
 			button({type:"button", class: "Mt(a) Ta(c) Py(s02) | _rInput() Bgc(#37474F) C(white) Fz(s3) M(s05) M(0)@md Bdrus(s04) Bdrus(0)@md Bxsh(0,0,s02,grey-4) Bxsh(n)@md",
 				onclick: e => {
@@ -33,7 +34,7 @@ const actions = hyperapp.app({
 						recordStart();
 					else
 						recordStop();
-				}
+				},
 			},
 				state.status
 			)
@@ -42,16 +43,20 @@ const actions = hyperapp.app({
 	actions: {
 		status: s => state => ({status: s}),
 		log: txt => state => {
-			state.log.push({body: txt});
 			localStorage.setItem("log", JSON.stringify(state.log));
-			return true;
+			return {
+				log: [...state.log, {body: txt}]
+			};
 		},
 		logUser: txt => state => {
-			state.log.push({body: txt, user: true});
 			localStorage.setItem("log", JSON.stringify(state.log));
-			return true;
+			return {
+				log: [...state.log, {body: txt, user: true}]
+			};
 		},
-		logClear: () => state => state.log = []
+		logClear: () => state => ({
+			log: []
+		})
 	}
 },
 document.currentScript.parent);

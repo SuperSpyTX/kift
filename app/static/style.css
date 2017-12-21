@@ -28,6 +28,7 @@
 .Fz\(s3\) {font-size: 1.44rem;}
 .Fz\(s4\) {font-size: 2rem;}
 .H\(100\%\) {height: 100%;}
+.H\(s03\) {height: .5rem;}
 .M\(0\) {margin: 0;}
 .M\(s05\) {margin: .125rem;}
 .Maw\(50rem\) {max-width: 50rem;}
@@ -35,7 +36,6 @@
 .Mt\(s03\) {margin-top: .5rem;}
 .Mx\(a\) {margin-left: auto; margin-right: auto;}
 .Mx\(s03\) {margin-left: .5rem; margin-right: .5rem;}
-.My\(s03\) {margin-top: .5rem; margin-bottom: .5rem;}
 .Ovy\(s\) {overflow-y: scroll;}
 .P\(s04\) {padding: .25rem;}
 .Py\(s02\) {padding-top: .694rem; padding-bottom: .694rem;}

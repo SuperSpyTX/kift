@@ -119,18 +119,17 @@ const NOT_FOUND = [
 	"I'm not sure what you mean."
 ]
 
-const COMMANDS = {
-	"hey": commandGreet,
-	"hello": commandGreet,
-	"hey hello": commandGreet,
-	"hi": commandGreet,
-	"hey max": commandGreet,
-	"hi max": commandGreet,
-	"hello max": commandGreet,
-	"max": commandGreet,
-	"maxwell": commandGreet,
-	"clear session": commandClear,
-	"delete history": commandClear
+const DEF = [
+	["hey", "hello", "hi", "max", "hey max", "hello max", "maxwell", commandGreet],
+	["clear session", "delete history", commandClear]
+]
+
+const COMMANDS = {};
+
+for (var i = 0; i < DEF.length; ++i) {
+	for (var j = 0; j < DEF[i].length - 1; ++j) {
+		COMMANDS[DEF[i][j]] = DEF[i][DEF[i].length - 1];
+	}
 }
 
 function parseCommand(command) {
