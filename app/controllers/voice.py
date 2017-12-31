@@ -1,30 +1,9 @@
-from threading import Semaphore, Thread
-from app import request, redirect, request_ps, render_template, app, Response
 from threading import Thread
+import time
+from app import request, redirect, request_ps, render_template, app, Response, push_event, SemaQueue
 from app.parse import parse_command
 
 # An actually working SSE implementation.
-
-# TODO: Move to separate class or is it ok here?
-CLIENTS = []
-class SemaQueue():
-    def __init__(self):
-        self.queue = []
-        self.lock = Semaphore(0)
-
-    def acquire(self, timeout=None):
-        return self.lock.acquire(True, timeout)
-
-    def pop(self):
-        return self.queue.pop(0)
-
-    def push(self, entry):
-        self.queue.append(entry)
-        self.lock.release()
-
-def push_event(text):
-    for client in CLIENTS:
-        client.push(text)
 
 @app.route("/", methods=["POST", "GET"])
 def voice():
@@ -43,9 +22,12 @@ def voice():
 def events():
     def gen():
         q = SemaQueue()
-        CLIENTS.append(q)
-        while q.acquire(app.config['CLIENT_SSE_TIMEOUT']):
-            entry = q.pop()
-            yield "data: {}\n\n".format(entry)
-        CLIENTS.remove(q)
+        while True:
+            if q.acquire(1):
+                entry = q.pop()
+                q.ts = int(time.time())
+                yield "data: {}\n\n".format(entry)
+            q.ts = int(time.time())
+            yield ""
+        print("Client removal")
     return Response(gen(), mimetype="text/event-stream")

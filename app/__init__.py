@@ -3,6 +3,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request, Res
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from .pocketsphinx import PocketSphinx
+from .sockets import SemaQueue, CLIENTS, push_event
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object("config")
