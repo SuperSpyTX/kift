@@ -1,6 +1,6 @@
-from threading import Semaphore, Thread
-from werkzeug.serving import WSGIRequestHandler
 import time
+from threading import Semaphore
+from werkzeug.serving import WSGIRequestHandler
 
 CLIENTS = []
 class SemaQueue():
@@ -35,7 +35,6 @@ class SemaQueue():
         if check is True:
             if not self.haslife():
                 return False
-        print("Sending...")
         self.queue.append(entry)
         self.lock.release()
         return True
@@ -50,7 +49,6 @@ def push_event(text):
             CLIENTS.remove(rem)
         except:
             pass
-    print("Current # of clients: " + str(len(CLIENTS)))
 
 def heartbeat():
     toremove = []

@@ -29,5 +29,4 @@ def events():
                 yield "data: {}\n\n".format(entry)
             q.ts = int(time.time())
             yield ""
-        print("Client removal")
     return Response(gen(), mimetype="text/event-stream")
