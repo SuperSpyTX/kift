@@ -10,9 +10,9 @@ def applescript(script):
 def command_lights_on(arg=None):
     applescript("""
     tell application "System Events"
-    	repeat 16 times
-    		key code 144
-    	end repeat
+        repeat 16 times
+            key code 144
+        end repeat
     end tell
     """)
     return random.choice([
@@ -23,9 +23,9 @@ def command_lights_on(arg=None):
 def command_lights_off(arg=None):
     applescript("""
     tell application "System Events"
-    	repeat 16 times
-    		key code 145
-    	end repeat
+        repeat 16 times
+            key code 145
+        end repeat
     end tell
     """)
     return random.choice([
