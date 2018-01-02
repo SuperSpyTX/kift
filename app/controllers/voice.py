@@ -1,6 +1,6 @@
 from threading import Thread
 import time
-from app import request, redirect, request_ps, render_template, app, Response, push_event, SemaQueue
+from app import request, redirect, corpus_ps, natural_ps, render_template, app, Response, push_event, SemaQueue
 from app.parse import parse_command
 
 # An actually working SSE implementation.
@@ -11,9 +11,10 @@ def voice():
         if request.data is None:
             return redirect(request.url)
         elif request.headers.get("Content-Type") == "audio/raw":
-            response = request_ps.process(request.data)
-            push_event("\"" + response + "\"")
-            Thread(target=parse_command, args=(response, push_event)).start()
+            corpus = corpus_ps.process(request.data)
+            natural = natural_ps.process(request.data)
+            push_event("\"" + corpus + "\"")
+            Thread(target=parse_command, args=(corpus, natural, push_event)).start()
             return "OK"
         return redirect("/")
     return render_template("index.html")

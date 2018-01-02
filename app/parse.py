@@ -45,8 +45,8 @@ for rule in DEF:
     for alias in rule[:-1]:
         COMMANDS[alias] = rule[-1]
 
-def parse_command(command, client_send):
+def parse_command(command, natural, client_send):
     if command in COMMANDS:
-        client_send("[true,\"" + COMMANDS[command](command) + "\"]")
+        client_send("[true,\"" + COMMANDS[command](command, natural) + "\"]")
     else:
         client_send("[false,\"" + command + "\"]")

@@ -9,12 +9,16 @@ app = Flask(__name__, static_url_path='/static')
 app.config.from_object("config")
 db = SQLAlchemy(app)
 
-# TODO: Rename global to be more accurate (action word)
 # TODO: Make a static function that does this garbage in pocketsphinx class.
-pocketsphinx = PocketSphinx(app.config['POCKETSPHINX_LIBPATH'], app.config['POCKETSPHINX_MODELDIR'],
+corpus_psconfig = PocketSphinx(app.config['POCKETSPHINX_LIBPATH'], app.config['POCKETSPHINX_MODELDIR'],
                             app.config['POCKETSPHINX_CORPUSDIR'] + "/corpus.lm.bin",
                             app.config['POCKETSPHINX_CORPUSDIR'] + "/corpus.dic")
-request_ps = pocketsphinx.initialize()
+natural_psconfig = PocketSphinx(app.config['POCKETSPHINX_LIBPATH'], app.config['POCKETSPHINX_MODELDIR'],
+                            app.config['POCKETSPHINX_MODELDIR'] + "/en-us.lm.bin",
+                            app.config['POCKETSPHINX_MODELDIR'] + "/en-us/cmudict-en-us.dict")
+
+corpus_ps = corpus_psconfig.initialize()
+natural_ps = natural_psconfig.initialize()
 
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
