@@ -10,9 +10,9 @@ def applescript(script):
 def command_lights_on(arg=None):
     applescript("""
     tell application "System Events"
-    	repeat 16 times
-    		key code 144
-    	end repeat
+        repeat 16 times
+            key code 144
+        end repeat
     end tell
     """)
     return random.choice([
@@ -23,9 +23,9 @@ def command_lights_on(arg=None):
 def command_lights_off(arg=None):
     applescript("""
     tell application "System Events"
-    	repeat 16 times
-    		key code 145
-    	end repeat
+        repeat 16 times
+            key code 145
+        end repeat
     end tell
     """)
     return random.choice([
@@ -33,10 +33,17 @@ def command_lights_off(arg=None):
         "Going dark."
     ])
 
-COMMANDS = {
-		"lights on":command_lights_on,
-		"lights off":command_lights_off
-}
+# List may contian any number of aliases, last element must be command to execute
+DEF = [
+    ["lights on", command_lights_on],
+    ["lights off", command_lights_off]
+]
+
+COMMANDS = {};
+
+for rule in DEF:
+    for alias in rule[:-1]:
+        COMMANDS[alias] = rule[-1]
 
 def parse_command(command, client_send):
     if command in COMMANDS:
