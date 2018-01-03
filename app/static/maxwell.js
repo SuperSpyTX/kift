@@ -102,7 +102,7 @@ function speak(txt) {
 }
 
 const timerSound = new Audio(["static/timer.ogg"]);
-const silverHammer = new Audio(["static/maxwells_silver_hammer.mp3"]);
+const silverHammer = new Audio(["static/maxwells_silver_hammer.opus"]);
 
 function notify(title, body, icon) {
 	const n = new Notification(title, {body: body, icon: icon, badge: icon, silent: true});
