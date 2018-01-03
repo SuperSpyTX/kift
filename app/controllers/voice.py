@@ -17,6 +17,7 @@ def index():
             push_event("\"" + corpus + "\"")
             Thread(target=parse_command, args=(corpus, {
                 "ip": request.remote_addr,
+                "yes": "no",
                 "username": current_user.username,
                 "data": request.data,
                 "email": current_user.email

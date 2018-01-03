@@ -43,16 +43,14 @@ const actions = hyperapp.app({
 	actions: {
 		status: s => state => ({status: s}),
 		log: txt => state => {
-			localStorage.setItem("log", JSON.stringify(state.log));
-			return {
-				log: [...state.log, {body: txt}]
-			};
+			const log = [...state.log, {body: txt}]
+			localStorage.setItem("log", JSON.stringify(log));
+			return {log: log};
 		},
 		logUser: txt => state => {
-			localStorage.setItem("log", JSON.stringify(state.log));
-			return {
-				log: [...state.log, {body: txt, user: true}]
-			};
+			const log = [...state.log, {body: txt, user: true}];
+			localStorage.setItem("log", JSON.stringify(log));
+			return {log: log};
 		},
 		logClear: () => state => ({
 			log: []
