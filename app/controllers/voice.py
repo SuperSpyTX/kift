@@ -14,7 +14,7 @@ def index():
             return redirect(request.url)
         elif request.headers.get("Content-Type") == "audio/raw":
             corpus = corpus_ps.process(request.data)
-            push_event("\"" + corpus + "\"")
+            push_event("\"" + corpus + "\"", current_user.username)
             Thread(target=parse_command, args=(corpus, {
                 "ip": request.remote_addr,
                 "username": current_user.username,
@@ -37,4 +37,4 @@ def events():
                 yield "data: {}\n\n".format(entry)
             q.ts = int(time.time())
             yield ""
-    return Response(gen(g.user.username), mimetype="text/event-stream")
+    return Response(gen(current_user.username), mimetype="text/event-stream")

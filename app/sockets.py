@@ -40,9 +40,13 @@ class SemaQueue():
         self.lock.release()
         return True
 
-def push_event(text):
+def push_event(text, username):
     toremove = []
     for client in CLIENTS:
+        if not client.haslife():
+            toremove.append(client)
+        if client.username != username:
+            continue
         if not client.push(text):
             toremove.append(client)
     for rem in toremove:

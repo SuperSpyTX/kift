@@ -5,7 +5,7 @@
 
 confidence=
 
-disable=bare-except,no-member,missing-docstring,empty-docstring,invalid-name
+disable=bare-except,no-member,missing-docstring,empty-docstring,invalid-name,unused-argument
 
 # There are already options enabled by default, this allows for explicit
 # enabling of checks that are disabled by default.

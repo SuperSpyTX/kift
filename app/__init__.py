@@ -26,7 +26,7 @@ natural_ps = natural_psconfig.initialize()
 uploads = os.path.dirname(os.path.abspath(__file__)) + "/static/"
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "unauthorized"
+login_manager.login_view = "login"
 
 # pylint: disable=C0411,C0413
 from app import models

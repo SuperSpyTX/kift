@@ -10,3 +10,4 @@ wrapper/sphinxbase/
 wrapper/*.dylib
 wrapper/*.dSYM
 wrapper/corpus
+config.py

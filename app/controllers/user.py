@@ -24,6 +24,7 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         email = request.form["email"]
+        phone = request.form["phone"]
         test_unique = models.User.query.filter_by(username=username).first()
         if test_unique is not None:
             flash("username already exits, try again")
@@ -33,6 +34,7 @@ def register():
         new_user.password_hash = hashed_pw
         new_user.email = email
         new_user.username = username
+        new_user.phone = phone
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for("login"))
@@ -63,7 +65,7 @@ def login():
                 flash("login successful")
                 return redirect(url_for("index"))
             flash("wrong password")
-            return redirect(url_for("unauthorized"))
+            return redirect(url_for("login"))
         else:
             return render_template("login.html", form=form)
     else:
@@ -74,7 +76,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("index"))
-
-@app.route("/unauthorized")
-def unauthorized():
-    return "NICE TRY ASSHOLE"

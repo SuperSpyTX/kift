@@ -22,3 +22,9 @@ on
 off
 too
 dark
+save a note with
+search the web for
+how old are you
+who are you
+what can you do
+its time to stop
