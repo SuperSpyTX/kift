@@ -78,7 +78,7 @@ function recordStop() {
 
 function formatResponse(txt) {
 	if (txt != "") {
-		if (txt.indexOf("what") != -1 || txt.indexOf("how") != -1)
+		if (txt.indexOf("what") != -1 || txt.indexOf("how") != -1 || txt.indexOf("where") != -1 || txt.indexOf("what") != -1)
 			txt = txt + "?"
 		else
 			txt = txt + "."
@@ -101,6 +101,15 @@ function speak(txt) {
 	speechSynthesis.speak(say);
 }
 
+const timerSound = new Audio(["static/timer.ogg"]);
+const silverHammer = new Audio(["static/maxwells_silver_hammer.mp3"]);
+
+function notify(title, body, icon) {
+	const n = new Notification(title, {body: body, icon: icon, badge: icon, silent: true});
+}
+
+Notification.requestPermission();
+
 // Commands
 
 function commandClear() {
@@ -113,15 +122,50 @@ function commandGreet() {
 	return oneOf(["Hello.", "Greetings."]);
 }
 
+function getTimeFormatted(t) {
+	const time = t==undefined ? new Date() : new Date(t);
+	const hours = time.getHours() % 12 || 12;
+	var minutes = time.getMinutes();
+	const ext = (((time.getHours()*100) + minutes) > 1200) ? "pm" : "am";
+	minutes = minutes < 10 ? "0" + minutes : minutes;
+	return hours + ":" + minutes + ext;
+}
+
+function commandTime() {
+	return (getTimeFormatted());
+}
+
+function commandTimer() {
+	setTimeout(function() {
+		notify("Timer", "Time's Up!", "/static/timer.svg")
+		timerSound.play()
+	}, 30000);
+	return ("Timer set for thirty seconds.")
+}
+
+function commandMusicPlay() {
+	silverHammer.play()
+	return ("Playing music..")
+}
+
+function commandMusicStop() {
+	silverHammer.pause()
+	return ("Stopping music..")
+}
+
 const NOT_FOUND = [
 	"Regrettably I can't serve you in this matter.",
 	"I didn't get that.",
-	"I'm not sure what you mean."
+	"I'm not sure what you mean?"
 ]
 
 const DEF = [
 	["hey", "hello", "hi", "max", "hey max", "hello max", "maxwell", commandGreet],
-	["clear session", "delete history", commandClear]
+	["clear session", "delete history", commandClear],
+	["what time is it", "what is time", "what is the time", commandTime],
+	["time are", "timer", commandTimer],
+	["play music", commandMusicPlay],
+	["stop music", commandMusicStop]
 ]
 
 const COMMANDS = {};
@@ -136,8 +180,7 @@ function parseCommand(command) {
 	if (command in COMMANDS) {
 		return COMMANDS[command](command);
 	}
-	else
-		return oneOf(NOT_FOUND);
+	return oneOf(NOT_FOUND);
 }
 
 /*
@@ -154,6 +197,10 @@ ev.onmessage = e => {
 	}
 	else {
 		if (response[0]) {
+			if (response[1].startsWith("search"))
+				response[1] = "Search.."
+			if (response[1].startsWith("note"))
+				response[1] = "Saving note to your email.."
 			actions.log(response[1]);
 			speak(response[1]);
 		}
