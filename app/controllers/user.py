@@ -60,7 +60,6 @@ def login():
                 flash("Bad username/password combination")
                 return render_template("login.html", form=form)
             if check_password_hash(reg_user.password_hash, password):
-                print(reg_user)
                 login_user(reg_user)
                 flash("login successful")
                 return redirect(url_for("index"))

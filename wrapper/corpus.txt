@@ -2,6 +2,9 @@ hello
 how
 are
 you
+who
+am
+i
 what
 time
 is
@@ -20,6 +23,7 @@ up
 down
 on
 off
+<<<<<<< HEAD
 too
 dark
 save a note with
@@ -28,3 +32,10 @@ how old are you
 who are you
 what can you do
 its time to stop
+weather
+the
+timer
+where
+my location
+play music
+stop music
