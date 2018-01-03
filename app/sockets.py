@@ -4,8 +4,9 @@ from werkzeug.serving import WSGIRequestHandler
 
 CLIENTS = []
 class SemaQueue():
-    def __init__(self):
+    def __init__(self, username):
         self.queue = []
+        self.username = username
         self.acquiring = False
         self.ts = int(time.time())
         self.lock = Semaphore(0)

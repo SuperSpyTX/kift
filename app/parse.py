@@ -1,5 +1,6 @@
 import random
 import subprocess
+from app import natural_ps, corpus_ps
 
 def applescript(script):
     osa = subprocess.Popen(["osascript", "-"],
@@ -39,14 +40,16 @@ DEF = [
     ["lights off", command_lights_off]
 ]
 
-COMMANDS = {};
+COMMANDS = {}
 
 for rule in DEF:
     for alias in rule[:-1]:
         COMMANDS[alias] = rule[-1]
 
-def parse_command(command, natural, client_send):
+def parse_command(command, user, client_send):
     if command in COMMANDS:
-        client_send("[true,\"" + COMMANDS[command](command, natural) + "\"]")
+        client_send("[true,\"" + str(COMMANDS[command]({**{
+            "command": command
+        }, **user})) + "\"]")
     else:
         client_send("[false,\"" + command + "\"]")
