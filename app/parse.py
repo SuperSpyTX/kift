@@ -1,5 +1,9 @@
+from app import app
+import requests
 import random
 import subprocess
+import os
+import math
 
 def applescript(script):
     osa = subprocess.Popen(["osascript", "-"],
@@ -33,10 +37,25 @@ def command_lights_off(arg=None):
         "Going dark."
     ])
 
-# List may contian any number of aliases, last element must be command to execute
+def command_identity(arg=None):
+    return "You are " + os.environ["USER"] + "."
+
+def command_weather(args):
+	#city = requests.get("http://geoip.nekudo.com/api/" + ip).json()
+    weather = requests.get("http://api.openweathermap.org/data/2.5/weather?q=Fremont&APPID=" + app.config["OPEN_WEATHER_MAP"] + "&units=metric").json()
+    temp = str(round(weather["main"]["temp"], 1))
+    speed = str(round(weather["wind"]["speed"], 1))
+    cardinals = {0: "East", 1: "South", 2: "West", 3: "North", 4:"East"}
+    heading = cardinals[math.floor(weather["wind"]["deg"] / 90 + 0.5)]
+    desc = weather["weather"][0]["description"]
+    return ("It is %sy, the temperature is %s Celsius there is a %s kilometer per hour wind from the %s." % (desc, temp, speed, heading))
+
+# List may contain any number of sentences to match past the first, last element is the command to execute
 DEF = [
-    ["lights on", command_lights_on],
-    ["lights off", command_lights_off]
+    ["lights on", "lights up", command_lights_on],
+    ["lights off", command_lights_off],
+	["who am i", command_identity],
+	["weather", "what is the weather", command_weather]
 ]
 
 COMMANDS = {};

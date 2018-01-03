@@ -2,6 +2,7 @@
 <html class="H(100%) M(0) Bxz(bb)">
 
 <head>
+	<title>{% block title %}{{title|default}}{% endblock title %}</title>
 	<meta name=viewport content="width=device-width, initial-scale=1">
 	<meta charset=utf-8>
 	<link rel=stylesheet type=text/css href=static/style.css>
@@ -12,7 +13,6 @@
 	<script src=static/prelude.js></script>
 	<script src=https://unpkg.com/hyperapp@0.16.2/dist/hyperapp.js></script>
 	{% block head %}{% endblock head %}
-	<title>{% block title %}{{title|default}}{% endblock title %}</title>
 </head>
 
 <body class="D(f) H(100%) M(0) | Ff(ClearSans)">

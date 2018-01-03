@@ -2,6 +2,9 @@ hello
 how
 are
 you
+who
+am
+i
 what
 time
 is
@@ -20,5 +23,6 @@ up
 down
 on
 off
-too
-dark
+weather
+the
+timer
