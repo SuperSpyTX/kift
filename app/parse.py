@@ -80,7 +80,7 @@ def command_personalize(arg):
     return "I do not understand"
 
 def command_identity(args=None):
-    return "You are " + arg["username"] + "."
+    return "You are " + args["username"] + "."
 
 def command_location(args=None):
     return "You are at " + socket.gethostname() + "."

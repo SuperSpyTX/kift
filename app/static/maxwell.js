@@ -197,10 +197,6 @@ ev.onmessage = e => {
 	}
 	else {
 		if (response[0]) {
-			if (response[1].startsWith("search"))
-				response[1] = "Search.."
-			if (response[1].startsWith("note"))
-				response[1] = "Saving note to your email.."
 			actions.log(response[1]);
 			speak(response[1]);
 		}
